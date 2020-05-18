@@ -1,0 +1,25 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+        {
+            "label": "create game accounts",
+            "type": "process",
+            "command": ".gitpod/tasks/accounts.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "launch ManaPlus",
+            "type": "process",
+            "command": ".gitpod/tasks/manaplus.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "launch ManaPlus with local data",
+            "type": "process",
+            "command": ".gitpod/tasks/manaplus-local.sh",
+            "problemMatcher": []
+        }
+    ]
+}
