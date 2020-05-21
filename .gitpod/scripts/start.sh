@@ -30,88 +30,61 @@ elif [ "${REPO_REMOTE:8:10}" = "github.com" ]; then
 fi
 
 # apply our custom gitignore:
-cp -f .gitpod/git/exclude .git/info/exclude
+#cp -f .gitpod/git/exclude .git/info/exclude
 
-
-# TODO: DRY this
+# symlink the prefetched repos
+ln -s ~/.evol/server-data server-data
+ln -s ~/.evol/client-data client-data
+ln -s ~/.evol/server-code server-code
+ln -s ~/.evol/server-code/src/evol server-plugin
+ln -s ~/.evol/tools tools
 
 function git_pull() {
     local DIR="$1"
-    if [ -d "$DIR" ]; then
-        local REMOTE="upstream"
-        local BRANCH="master"
-        local UPSTREAM="$REMOTE/$BRANCH"
+    local REMOTE="upstream"
+    local BRANCH="master"
+    local UPSTREAM="$REMOTE/$BRANCH"
 
-        pushd $DIR 1>/dev/null
-        git fetch $REMOTE
+    pushd $DIR 1>/dev/null
+    git fetch $REMOTE
 
-        local CURRENT=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
-        local CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
+    local UPSTREAM_URL=$(git config --get remote.upstream.url)
+    local FORK_URL=$(git config --get remote.origin.url 2>/dev/null || echo "")
 
-        if [ "$CURRENT" = "$UPSTREAM" ] && [ "$CURRENT_BRANCH" = "$BRANCH" ]; then
-            local LOCAL=$(git rev-parse @)
-            #local REMOTE=$(git rev-parse "$UPSTREAM")
-            local BASE=$(git merge-base @ "$UPSTREAM")
-
-            if [ $LOCAL = $BASE ]; then
-                # we are on upstream/master and can fast-forward
-                git pull -q
-            fi
-        fi
-        popd 1>/dev/null
-    else
-        . "./.gitpod/scripts/init/${DIR}.sh"
+    if [[ ! -z "$GITLAB_NAME" ]] && [ -z "$FORK_URL" ]; then
+        FORK_URL=$(git config --get remote.upstream.url | sed -r "s%https://gitlab.com/([^/]+)/(.+(\.git)?)%https://gitlab.com/$GITLAB_NAME/\2%")
+        git remote add --fetch origin "$FORK_URL"
     fi
+
+    local CURRENT=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+    local CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
+
+    if [ "$CURRENT" = "$UPSTREAM" ] && [ "$CURRENT_BRANCH" = "$BRANCH" ]; then
+        local LOCAL=$(git rev-parse @)
+        #local REMOTE=$(git rev-parse "$UPSTREAM")
+        local BASE=$(git merge-base @ "$UPSTREAM")
+
+        if [ $LOCAL = $BASE ]; then
+            # we are on upstream/master and can fast-forward
+            git pull -q
+        fi
+    fi
+    popd 1>/dev/null
 }
 
 git_pull "tools"
-
-if [ -d "server-code" ]; then
-    REMOTE="upstream"
-    BRANCH="master"
-    UPSTREAM="$REMOTE/$BRANCH"
-
-    pushd server-code 1>/dev/null
-    git fetch $REMOTE
-
-    CURRENT=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
-    CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
-
-    if [ "$CURRENT" = "$UPSTREAM" ] && [ "$CURRENT_BRANCH" = "$BRANCH" ]; then
-        LOCAL=$(git rev-parse @)
-        #REMOTE=$(git rev-parse "$UPSTREAM")
-        BASE=$(git merge-base @ "$UPSTREAM")
-
-        if [ $LOCAL = $BASE ]; then
-            # we are on upstream/master and can fast-forward
-            git pull -q
-        fi
-    fi
-
-    pushd src/evol 1>/dev/null
-    git fetch $REMOTE
-
-    CURRENT=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
-    CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
-
-    if [ "$CURRENT" = "$UPSTREAM" ] && [ "$CURRENT_BRANCH" = "$BRANCH" ]; then
-        LOCAL=$(git rev-parse @)
-        #REMOTE=$(git rev-parse "$UPSTREAM")
-        BASE=$(git merge-base @ "$UPSTREAM")
-
-        if [ $LOCAL = $BASE ]; then
-            # we are on upstream/master and can fast-forward
-            git pull -q
-        fi
-    fi
-    popd 1>/dev/null
-    popd 1>/dev/null
-else
-    ./.gitpod/scripts/init/server-code.sh
-fi
-
+git_pull "server-code"
+git_pull "server-plugin"
 git_pull "server-data"
 git_pull "client-data"
+
+# set up extra repos for Hercules development
+pushd server-code
+HERC_FORK_URL=$(git config --get remote.herc.url 2>/dev/null || echo "")
+if [[ ! -z "$GITHUB_NAME" ]] && [ -z "$HERC_FORK_URL" ]; then
+    git remote add hub "https://github.com/$GITHUB_NAME/Hercules.git"
+fi
+popd
 
 ./.gitpod/scripts/sql.sh
 

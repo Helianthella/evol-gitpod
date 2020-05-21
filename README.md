@@ -10,3 +10,9 @@ Creates a new Gitpod instance pre-configured for The Mana World.
 - Hercules & Evol-Hercules (plugin)
 - ManaPlus
 - noVNC (to run ManaPlus)
+
+## Configuration
+Extra variables may be set in the Gitpod account settings to configure the environment.
+
+- `GITHUB_NAME`: your GitHub username
+- `GITLAB_NAME`: your GitLab username

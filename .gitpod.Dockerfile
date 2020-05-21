@@ -1,5 +1,7 @@
 FROM gitpod/workspace-mysql
 
+USER gitpod
+
 # use apt mirrors for faster fetching
 RUN sudo sed -i -e 's%https\?://\(us.\)\?archive.ubuntu.com/ubuntu/%mirror://mirrors.ubuntu.com/mirrors.txt%' /etc/apt/sources.list
 
@@ -19,6 +21,25 @@ RUN wget http://repo.evolonline.org/manaplus/ubuntu/manaplus-addrepo_1.3_all.deb
  && sudo rm -rf /var/lib/apt/lists/*
 
 RUN sudo ln -s /usr/games/manaplus /usr/bin/manaplus
+
+RUN mkdir -p ~/.evol
+
+RUN git clone https://gitlab.com/evol/clientdata.git --origin upstream ~/.evol/client-data
+RUN git clone https://gitlab.com/evol/evol-tools.git --origin upstream ~/.evol/tools
+RUN git clone https://gitlab.com/evol/serverdata.git --origin upstream ~/.evol/server-data
+RUN git clone https://gitlab.com/evol/hercules.git --origin upstream ~/.evol/server-code
+RUN git clone https://gitlab.com/evol/evol-hercules.git --origin upstream ~/.evol/server-code/src/evol
+
+RUN cd ~/.evol/server-code \
+ && git remote add --fetch herc https://github.com/HerculesWS/Hercules.git \
+ && cd ..
+
+RUN cd ~/.evol/server-data \
+ && make conf && make build \
+ && cd ..
+
+
+
 
 
 # noVNC (from gitpod/workspace-full-vnc:latest)
