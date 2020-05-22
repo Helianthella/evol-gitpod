@@ -16,7 +16,7 @@ RUN wget http://repo.evolonline.org/manaplus/ubuntu/manaplus-addrepo_1.3_all.deb
     make autoconf automake autopoint libtool libz-dev \
     libmysqlclient-dev zlib1g-dev libpcre3-dev \
     cpanminus libexpat1 libexpat1-dev wget tmux ripgrep \
-    xvfb x11vnc xterm \
+    xvfb x11vnc xterm zsh \
  && sudo apt-get build-dep -yy manaplus \
  && sudo cpanm XML::Simple \
  && sudo apt-get clean \
@@ -33,6 +33,8 @@ RUN git clone https://gitlab.com/evol/evol-tools.git --origin upstream ~/.evol/t
 RUN git clone https://gitlab.com/evol/serverdata.git --origin upstream ~/.evol/server-data
 RUN git clone https://gitlab.com/evol/hercules.git --origin upstream ~/.evol/server-code
 RUN git clone https://gitlab.com/evol/evol-hercules.git --origin upstream ~/.evol/server-code/src/evol
+
+RUN ln -s ~/.evol/server-code/src/evol ~/.evol/server-plugin
 
 RUN cd ~/.evol/server-code \
  && git remote add --fetch herc https://github.com/HerculesWS/Hercules.git \
@@ -72,3 +74,13 @@ RUN echo "export DISPLAY=:0" >> ~/.bashrc
 RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -print -quit) \
     && { [ -z "$notOwnedFile" ] \
         || { echo "Error: not all files/dirs in $HOME are owned by 'gitpod' user & group"; exit 1; } }
+
+
+
+# seppuku prompt
+RUN echo "exec zsh" >> ~/.bashrc
+RUN curl -Lo install.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh \
+ && sh install.sh --unattended \
+ && git clone https://github.com/Helianthella/seppuku ~/.seppuku \
+ && cd ~/.seppuku \
+ && make install

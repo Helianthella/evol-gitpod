@@ -19,7 +19,8 @@ function dirty_exit() {
 
 trap dirty_exit EXIT
 
-chmod u+x ./.gitpod/**/*.sh
+cd /workspace/evol-gitpod
+chmod u+x ./**/*.sh
 
 REPO_REMOTE=$(git config --get remote.origin.url)
 
@@ -27,6 +28,14 @@ if [ "${REPO_REMOTE:8:10}" = "gitlab.com" ]; then
     export GITLAB_NAME=$(git config --get remote.origin.url | sed -r "s#.+\.com[:/]{1,2}([^/]+)/.+#\1#")
 elif [ "${REPO_REMOTE:8:10}" = "github.com" ]; then
     export GITHUB_NAME=$(git config --get remote.origin.url | sed -r "s#.+\.com[:/]{1,2}([^/]+)/.+#\1#")
+fi
+
+if [[ ! -z "$GIT_AUTHOR_NAME" ]]; then
+    git config --global user.name $GIT_AUTHOR_NAME
+fi
+
+if [[ ! -z "$GIT_AUTHOR_EMAIL" ]]; then
+    git config --global user.email $GIT_AUTHOR_EMAIL
 fi
 
 REPO_LIST=(
@@ -44,8 +53,8 @@ function git_pull() {
     local BRANCH="master"
     local UPSTREAM="$REMOTE/$BRANCH"
 
-    pushd $DIR 1>/dev/null
-    git fetch -q $REMOTE
+    pushd ~/.evol/$DIR 1>/dev/null
+    git fetch -q $REMOTE 1>/dev/null
 
     local UPSTREAM_URL=$(git config --get remote.upstream.url)
     local FORK_URL=$(git config --get remote.origin.url 2>/dev/null || echo "")
@@ -72,25 +81,24 @@ function git_pull() {
 }
 
 for i in "${REPO_LIST[@]}"; do
-    ln -sf ~/.evol/$i $i
     git_pull "$i" &
 done; wait
 
 # set up extra remotes for Hercules development
-pushd server-code 1>/dev/null
+pushd ~/.evol/server-code 1>/dev/null
 HERC_FORK_URL=$(git config --get remote.hub.url 2>/dev/null || echo "")
 if [[ ! -z "$GITHUB_NAME" ]] && [ -z "$HERC_FORK_URL" ]; then
     git remote add --fetch hub "https://github.com/$GITHUB_NAME/Hercules.git" &>/dev/null
 fi
 popd 1>/dev/null
 
-./.gitpod/scripts/sql.sh
+./scripts/sql.sh
 
 echo
 echo "- - - - - - - - - - - - - - - - - - - - - - - -"
 echo
 echo "✅  all done"
 
-WORKSPACE_URL="$(gp url)/#/workspace/evol-gitpod/.theia/workspace.theia-workspace"
-echo -e "To open the evol workspace, Ctrl + click this link:\n$WORKSPACE_URL"
+cd ~/.evol
+clear
 exit 0
