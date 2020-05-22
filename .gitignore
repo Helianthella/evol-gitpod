@@ -4,5 +4,11 @@
 # see file .gitpod/git/exclude
 
 server-plugin
+server-data
+client-data
+tools
+server-code
+manaplus
+
 core.manaplus*
 .manaplus

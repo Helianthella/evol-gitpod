@@ -16,3 +16,6 @@ Extra variables may be set in the Gitpod account settings to configure the envir
 
 - `GITHUB_NAME`: your GitHub username
 - `GITLAB_NAME`: your GitLab username
+
+## Workspace files
+- [.theia/workspace.theia-workspace](.theia/workspace.theia-workspace)
