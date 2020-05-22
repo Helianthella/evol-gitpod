@@ -34,6 +34,8 @@ RUN git clone https://gitlab.com/evol/serverdata.git --origin upstream ~/.evol/s
 RUN git clone https://gitlab.com/evol/hercules.git --origin upstream ~/.evol/server-code
 RUN git clone https://gitlab.com/evol/evol-hercules.git --origin upstream ~/.evol/server-code/src/evol
 
+RUN ln -s ~/.evol/server-code/src/evol ~/.evol/server-plugin
+
 RUN cd ~/.evol/server-code \
  && git remote add --fetch herc https://github.com/HerculesWS/Hercules.git \
  && cd ..

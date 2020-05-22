@@ -6,19 +6,19 @@
         {
             "label": "create game accounts",
             "type": "process",
-            "command": ".gitpod/tasks/accounts.sh",
+            "command": "/workspace/evol-gitpod/tasks/accounts.sh",
             "problemMatcher": []
         },
         {
             "label": "launch ManaPlus",
             "type": "process",
-            "command": ".gitpod/tasks/manaplus.sh",
+            "command": "/workspace/evol-gitpod/tasks/manaplus.sh",
             "problemMatcher": []
         },
         {
             "label": "launch ManaPlus with local data",
             "type": "process",
-            "command": ".gitpod/tasks/manaplus-local.sh",
+            "command": "/workspace/evol-gitpod/tasks/manaplus-local.sh",
             "problemMatcher": []
         }
     ]

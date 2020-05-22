@@ -3,7 +3,7 @@
 gp await-port 6080
 gp preview $(gp url 6080)
 
-export MANAPLUS="$GITPOD_REPO_ROOT/manaplus/src/manaplus"
+export MANAPLUS="~/.evol/manaplus/src/manaplus"
 if [ -f "$MANAPLUS" ]; then
     echo "Starting local manaplus"
 else
@@ -12,5 +12,5 @@ else
 fi
 
 
-${MANAPLUS} -C $GITPOD_REPO_ROOT/.manaplus
+${MANAPLUS}
 rm -f core.manaplus*
