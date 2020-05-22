@@ -33,11 +33,12 @@ fi
 #cp -f .gitpod/git/exclude .git/info/exclude
 
 # symlink the prefetched repos
-ln -s ~/.evol/server-data server-data
-ln -s ~/.evol/client-data client-data
-ln -s ~/.evol/server-code server-code
-ln -s ~/.evol/server-code/src/evol server-plugin
-ln -s ~/.evol/tools tools
+ln -sf ~/.evol/server-data server-data
+ln -sf ~/.evol/client-data client-data
+ln -sf ~/.evol/server-code server-code
+ln -sf ~/.evol/server-code/src/evol server-plugin
+ln -sf ~/.evol/tools tools
+ln -sf ~/.evol/manaplus manaplus
 
 function git_pull() {
     local DIR="$1"

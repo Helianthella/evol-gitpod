@@ -9,13 +9,15 @@ RUN wget http://repo.evolonline.org/manaplus/ubuntu/manaplus-addrepo_1.3_all.deb
  && sudo apt install -yy -qq ./manaplus-addrepo_1.3_all.deb \
  && rm manaplus-addrepo_1.3_all.deb \
  && sudo sed -i "s/manaplus \w\+ /manaplus disco /" /etc/apt/sources.list.d/mana* \
+ && echo "deb-src http://repo.evolonline.org/manaplus disco main" | sudo tee -a /etc/apt/sources.list.d/manaplusauto.list \
  && sudo apt-get update \
  && sudo apt-get install -yy \
-    manaplus \
+    manaplus valgrind gdb \
     make autoconf automake autopoint libtool libz-dev \
     libmysqlclient-dev zlib1g-dev libpcre3-dev \
     cpanminus libexpat1 libexpat1-dev wget tmux ripgrep \
     xvfb x11vnc xterm \
+ && sudo apt-get build-dep -yy manaplus \
  && sudo cpanm XML::Simple \
  && sudo apt-get clean \
  && sudo rm -rf /var/lib/apt/lists/*
@@ -23,6 +25,8 @@ RUN wget http://repo.evolonline.org/manaplus/ubuntu/manaplus-addrepo_1.3_all.deb
 RUN sudo ln -s /usr/games/manaplus /usr/bin/manaplus
 
 RUN mkdir -p ~/.evol
+
+RUN git clone https://gitlab.com/manaplus/manaplus.git --origin upstream ~/.evol/manaplus
 
 RUN git clone https://gitlab.com/evol/clientdata.git --origin upstream ~/.evol/client-data
 RUN git clone https://gitlab.com/evol/evol-tools.git --origin upstream ~/.evol/tools
@@ -36,6 +40,14 @@ RUN cd ~/.evol/server-code \
 
 RUN cd ~/.evol/server-data \
  && make conf && make build \
+ && cd ..
+
+RUN cd ~/.evol/manaplus \
+ && autoreconf -i \
+ && mkdir -p ~/.local \
+ && ./configure --quiet --prefix=/home/gitpod/.local \
+ && make \
+ && make install \
  && cd ..
 
 
