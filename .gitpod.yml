@@ -5,6 +5,9 @@ tasks:
   - init: chmod +x .gitpod/scripts/start.sh
     command: ./.gitpod/scripts/start.sh
 
+checkoutLocation: /workspace/evol-gitpod
+workspaceLocation: /workspace/evol-gitpod/.theia/workspace.theia-workspace
+
 ports:
  - port: 3306 # mysql
    onOpen: ignore # never prompt, never expose
