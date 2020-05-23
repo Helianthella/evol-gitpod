@@ -16,7 +16,7 @@ ln -s /workspace/evol-gitpod/.evol/server-code/src/evol /workspace/evol-gitpod/.
 
 # build hercules
 pushd server-data
-make conf
+make config
 make build
 popd
 

@@ -2,7 +2,8 @@
 
 # script run every time the gitpod instance launches
 
-set -e
+set -e # do not recover from errors
+echo -e '\033]2;PLEASE WAIT\007' # set the tab title
 echo "⌛  running startup script..."
 
 function dirty_exit() {
@@ -107,7 +108,6 @@ ZSH_INSTALLED=$(tail ~/.bashrc | grep -sc "exec zsh" || true)
 
 if [ "$ZSH_INSTALLED" = "0" ]; then
     if [[ ! -d "seppuku" ]]; then
-        echo "seppuku not fetched"
         curl -Lo ohmyzsh.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh &>/dev/null
         git clone https://github.com/Helianthella/seppuku.git seppuku &>/dev/null
     fi
