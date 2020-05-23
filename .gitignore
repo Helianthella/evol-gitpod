@@ -1,14 +1,2 @@
-# most of the gitignore is applied locally (.git/info/exclude)
-# to avoid excluding source files from the file search
-
-# see file .gitpod/git/exclude
-
-server-plugin
-server-data
-client-data
-tools
-server-code
-manaplus
-
 core.manaplus*
-.manaplus
+.evol

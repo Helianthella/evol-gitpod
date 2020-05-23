@@ -2,8 +2,8 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - init: echo "exec zsh" >> ~/.bashrc && echo "ZSH_THEME_TERM_TITLE_IDLE=\"\${ZSH_THEME_TERM_TAB_TITLE_IDLE}\"" >> ~/.zshrc
-    command: bash /workspace/evol-gitpod/scripts/start.sh && cd ~/.evol && exec zsh
+  - init: bash /workspace/evol-gitpod/scripts/init.sh
+    command: bash /workspace/evol-gitpod/scripts/start.sh && cd /workspace/evol-gitpod/.evol && exec zsh
 
 checkoutLocation: evol-gitpod
 workspaceLocation: evol-gitpod/evol-gitpod.theia-workspace

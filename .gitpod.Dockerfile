@@ -24,37 +24,6 @@ RUN wget http://repo.evolonline.org/manaplus/ubuntu/manaplus-addrepo_1.3_all.deb
 
 RUN sudo ln -s /usr/games/manaplus /usr/bin/manaplus
 
-RUN mkdir -p ~/.evol
-
-RUN git clone https://gitlab.com/manaplus/manaplus.git --origin upstream ~/.evol/manaplus
-
-RUN git clone https://gitlab.com/evol/clientdata.git --origin upstream ~/.evol/client-data
-RUN git clone https://gitlab.com/evol/evol-tools.git --origin upstream ~/.evol/tools
-RUN git clone https://gitlab.com/evol/serverdata.git --origin upstream ~/.evol/server-data
-RUN git clone https://gitlab.com/evol/hercules.git --origin upstream ~/.evol/server-code
-RUN git clone https://gitlab.com/evol/evol-hercules.git --origin upstream ~/.evol/server-code/src/evol
-
-RUN ln -s ~/.evol/server-code/src/evol ~/.evol/server-plugin
-
-RUN cd ~/.evol/server-code \
- && git remote add --fetch herc https://github.com/HerculesWS/Hercules.git \
- && cd ..
-
-RUN cd ~/.evol/server-data \
- && make conf && make build \
- && cd ..
-
-RUN cd ~/.evol/manaplus \
- && autoreconf -i \
- && mkdir -p ~/.local \
- && ./configure --quiet --prefix=/home/gitpod/.local \
- && make \
- && make install \
- && cd ..
-
-
-
-
 
 # noVNC (from gitpod/workspace-full-vnc:latest)
 RUN sudo git clone https://github.com/novnc/noVNC.git /opt/novnc \
@@ -74,12 +43,3 @@ RUN echo "export DISPLAY=:0" >> ~/.bashrc
 RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -print -quit) \
     && { [ -z "$notOwnedFile" ] \
         || { echo "Error: not all files/dirs in $HOME are owned by 'gitpod' user & group"; exit 1; } }
-
-
-
-# seppuku prompt
-RUN curl -Lo install.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh \
- && sh install.sh --unattended \
- && git clone https://github.com/Helianthella/seppuku ~/.seppuku \
- && cd ~/.seppuku \
- && make install

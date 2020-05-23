@@ -1,22 +1,22 @@
 {
    "folders": [
       {
-         "path": "file:///home/gitpod/.evol/server-data"
+         "path": "file:///workspace/evol-gitpod/.evol/server-data"
       },
       {
-         "path": "file:///home/gitpod/.evol/client-data"
+         "path": "file:///workspace/evol-gitpod/.evol/client-data"
       },
       {
-         "path": "file:///home/gitpod/.evol/tools"
+         "path": "file:///workspace/evol-gitpod/.evol/tools"
       },
       {
-         "path": "file:///home/gitpod/.evol/server-code"
+         "path": "file:///workspace/evol-gitpod/.evol/server-code"
       },
       {
-         "path": "file:///home/gitpod/.evol/server-plugin"
+         "path": "file:///workspace/evol-gitpod/.evol/server-plugin"
       },
       {
-         "path": "file:///home/gitpod/.evol/manaplus"
+         "path": "file:///workspace/evol-gitpod/.evol/manaplus"
       },
       {
          "path": "file:///workspace/evol-gitpod"

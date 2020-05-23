@@ -53,7 +53,7 @@ function git_pull() {
     local BRANCH="master"
     local UPSTREAM="$REMOTE/$BRANCH"
 
-    pushd ~/.evol/$DIR 1>/dev/null
+    pushd /workspace/evol-gitpod/.evol/$DIR 1>/dev/null
     git fetch -q $REMOTE 1>/dev/null
 
     local UPSTREAM_URL=$(git config --get remote.upstream.url)
@@ -85,7 +85,7 @@ for i in "${REPO_LIST[@]}"; do
 done; wait
 
 # set up extra remotes for Hercules development
-pushd ~/.evol/server-code 1>/dev/null
+pushd /workspace/evol-gitpod/.evol/server-code 1>/dev/null
 HERC_FORK_URL=$(git config --get remote.hub.url 2>/dev/null || echo "")
 if [[ ! -z "$GITHUB_NAME" ]] && [ -z "$HERC_FORK_URL" ]; then
     git remote add --fetch hub "https://github.com/$GITHUB_NAME/Hercules.git" &>/dev/null
@@ -99,6 +99,5 @@ echo "- - - - - - - - - - - - - - - - - - - - - - - -"
 echo
 echo "✅  all done"
 
-cd ~/.evol
+cd /workspace/evol-gitpod
 clear
-exit 0
