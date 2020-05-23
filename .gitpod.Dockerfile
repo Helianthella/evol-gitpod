@@ -78,7 +78,6 @@ RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -print -q
 
 
 # seppuku prompt
-RUN echo "exec zsh" >> ~/.bashrc
 RUN curl -Lo install.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh \
  && sh install.sh --unattended \
  && git clone https://github.com/Helianthella/seppuku ~/.seppuku \
