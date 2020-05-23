@@ -61,7 +61,10 @@ function git_pull() {
 
     if [[ ! -z "$GITLAB_NAME" ]] && [ -z "$FORK_URL" ]; then
         FORK_URL=$(git config --get remote.upstream.url | sed -r "s%https://gitlab.com/([^/]+)/(.+(\.git)?)%https://gitlab.com/$GITLAB_NAME/\2%")
-        git remote add --fetch origin "$FORK_URL" 1>/dev/null
+        local FORK_EXISTS=$(git ls-remote -hq "$FORK_URL" master &>/dev/null || echo $?)
+        if [ -z "$FORK_EXISTS" ]; then
+            git remote add --fetch origin "$FORK_URL" 1>/dev/null
+        fi
     fi
 
     local CURRENT=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
@@ -88,7 +91,11 @@ done; wait
 pushd /workspace/evol-gitpod/.evol/server-code 1>/dev/null
 HERC_FORK_URL=$(git config --get remote.hub.url 2>/dev/null || echo "")
 if [[ ! -z "$GITHUB_NAME" ]] && [ -z "$HERC_FORK_URL" ]; then
-    git remote add --fetch hub "https://github.com/$GITHUB_NAME/Hercules.git" &>/dev/null
+    HERC_FORK_URL="https://github.com/$GITHUB_NAME/Hercules.git"
+    FORK_EXISTS=$(git ls-remote -hq "$HERC_FORK_URL" master &>/dev/null || echo $?)
+    if [ -z "$FORK_EXISTS" ]; then
+        git remote add --fetch hub "$HERC_FORK_URL" 1>/dev/null
+    fi
 fi
 popd 1>/dev/null
 
