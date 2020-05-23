@@ -94,10 +94,29 @@ popd 1>/dev/null
 
 ./scripts/sql.sh
 
+
+# seppuku prompt
+ZSH_INSTALLED=$(tail ~/.bashrc | grep -sc "exec zsh" || true)
+
+if [ "$ZSH_INSTALLED" = "0" ]; then
+    if [[ ! -d "seppuku" ]]; then
+        echo "seppuku not fetched"
+        curl -Lo ohmyzsh.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh &>/dev/null
+        git clone https://github.com/Helianthella/seppuku.git seppuku &>/dev/null
+    fi
+    sh ohmyzsh.sh --unattended &>/dev/null
+    pushd seppuku &>/dev/null
+    make install &>/dev/null
+    popd &>/dev/null
+    echo "exec zsh" >> ~/.bashrc
+    echo "ZSH_THEME_TERM_TITLE_IDLE=\"\${ZSH_THEME_TERM_TAB_TITLE_IDLE}\"" >> ~/.zshrc
+fi
+
+
 echo
 echo "- - - - - - - - - - - - - - - - - - - - - - - -"
 echo
 echo "✅  all done"
 
 cd /workspace/evol-gitpod
-clear
+#clear
