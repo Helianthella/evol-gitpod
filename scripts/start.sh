@@ -100,7 +100,7 @@ if [[ ! -z "$GITHUB_NAME" ]] && [ -z "$HERC_FORK_URL" ]; then
 fi
 popd 1>/dev/null
 
-./scripts/sql.sh
+bash /workspace/evol-gitpod/scripts/sql.sh
 
 
 # seppuku prompt
