@@ -11,7 +11,17 @@ workspaceLocation: evol-gitpod/evol-gitpod.theia-workspace
 ports:
  - port: 3306 # mysql
    onOpen: ignore # never prompt, never expose
- - port: 5900
+ - port: 33060 # mysql (X protocol)
+   onOpen: ignore # never prompt, never expose
+ - port: 5900 # VNC
+   onOpen: ignore # never prompt, never expose
+ - port: 6080 # noVNC
+   onOpen: notify
+ - port: 6901 # login server
+   onOpen: ignore # never prompt, never expose
+ - port: 5122 # char server
+   onOpen: ignore # never prompt, never expose
+ - port: 6122 # map server
    onOpen: ignore # never prompt, never expose
 
 github:
