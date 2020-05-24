@@ -103,6 +103,18 @@ popd 1>/dev/null
 bash /workspace/evol-gitpod/scripts/sql.sh
 
 
+# custom mods
+GITPOD_CUSTOM=${GITPOD_CUSTOM:-$CUSTOM_MODS}
+if [[ ! -z "$GITPOD_CUSTOM" ]]; then
+    if [[ ! -d ".gitpod-config" ]]; then
+        git clone --depth=1 -q "$GITPOD_CUSTOM" .gitpod-config &>/dev/null
+    fi
+    pushd .gitpod-config &>/dev/null
+    make &>/dev/null
+    popd &>/dev/null
+fi
+
+
 # seppuku prompt
 ZSH_INSTALLED=$(tail ~/.bashrc | grep -sc "exec zsh" || true)
 

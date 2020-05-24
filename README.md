@@ -19,3 +19,8 @@ Environment variables may be set in the Gitpod account settings to configure the
 - `GITLAB_NAME`: your GitLab username
 - `GIT_AUTHOR_NAME`: the author name to use whit git
 - `GIT_AUTHOR_EMAIL`: the author email to use whit git
+- `CUSTOM_MODS`: the repo URL containing your custom mods
+
+## Custom modifications
+The `CUSTOM_MODS` variable can be set to a git repository that contains custom modifications.
+The repository must contain a Makefile, which will be called with `make` (default target) after the workspace starts up.

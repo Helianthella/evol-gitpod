@@ -32,6 +32,7 @@
             ".evol": true,
             "seppuku": true,
             "ohmyzsh.sh": true,
+            ".gitpod-config": true,
         }
    }
 }
