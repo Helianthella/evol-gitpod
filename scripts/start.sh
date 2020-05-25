@@ -129,6 +129,7 @@ if [ "$ZSH_INSTALLED" = "0" ]; then
     popd &>/dev/null
     echo "exec zsh" >> ~/.bashrc
     echo "ZSH_THEME_TERM_TITLE_IDLE=\"\${ZSH_THEME_TERM_TAB_TITLE_IDLE}\"" >> ~/.zshrc
+    echo "unalias gp" >> ~/.zshrc # workaround for ohmyzsh:plugins/git/git.plugin.zsh
 fi
 
 
