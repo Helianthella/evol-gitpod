@@ -3,7 +3,7 @@ image:
 
 tasks:
   - init: bash /workspace/evol-gitpod/scripts/init.sh
-    command: bash /workspace/evol-gitpod/scripts/start.sh && cd /workspace/evol-gitpod/.evol && exec zsh
+    command: bash /workspace/evol-gitpod/scripts/start.sh && cd /workspace/evol-gitpod/.evol && bash
 
 checkoutLocation: evol-gitpod
 workspaceLocation: evol-gitpod/evol-gitpod.theia-workspace

@@ -1,38 +1,37 @@
 {
-   "folders": [
-      {
-         "path": "file:///workspace/evol-gitpod/.evol/server-data"
-      },
-      {
-         "path": "file:///workspace/evol-gitpod/.evol/client-data"
-      },
-      {
-         "path": "file:///workspace/evol-gitpod/.evol/tools"
-      },
-      {
-         "path": "file:///workspace/evol-gitpod/.evol/server-code"
-      },
-      {
-         "path": "file:///workspace/evol-gitpod/.evol/server-plugin"
-      },
-      {
-         "path": "file:///workspace/evol-gitpod/.evol/manaplus"
-      },
-      {
-         "path": "file:///workspace/evol-gitpod"
-      }
-   ],
-   "settings": {
-       "files.exclude": {
-            "**/.git": true,
-            "**/.svn": true,
-            "**/.hg": true,
-            "**/CVS": true,
-            "**/.DS_Store": true,
+    "folders": [
+        {
+            "path": "file:///workspace/evol-gitpod/.evol/server-data"
+        },
+        {
+            "path": "file:///workspace/evol-gitpod/.evol/client-data"
+        },
+        {
+            "path": "file:///workspace/evol-gitpod/.evol/tools"
+        },
+        {
+            "path": "file:///workspace/evol-gitpod/.evol/server-code"
+        },
+        {
+            "path": "file:///workspace/evol-gitpod/.evol/server-plugin"
+        },
+        {
+            "path": "file:///workspace/evol-gitpod/.evol/manaplus"
+        },
+        {
+            "path": "file:///workspace/evol-gitpod"
+        }
+    ],
+    "settings": {
+        "files.associations": {
+            "*.theia-workspace": "json",
+        },
+        "files.exclude": {
+            ".git": true,
             ".evol": true,
             "seppuku": true,
             "ohmyzsh.sh": true,
             ".gitpod-config": true,
         }
-   }
+    }
 }

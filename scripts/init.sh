@@ -29,13 +29,4 @@ make
 make install
 popd
 
-# seppuku prompt
-curl -Lo install.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-sh install.sh --unattended
-rm install.sh
-git clone https://github.com/Helianthella/seppuku.git ~/.seppuku
-pushd ~/.seppuku
-make install
-popd
-echo "exec zsh" >> ~/.bashrc
-echo "ZSH_THEME_TERM_TITLE_IDLE=\"\${ZSH_THEME_TERM_TAB_TITLE_IDLE}\"" >> ~/.zshrc
+. /workspace/evol-gitpod/scripts/dotfiles.sh

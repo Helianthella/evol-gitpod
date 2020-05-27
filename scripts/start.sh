@@ -31,14 +31,6 @@ elif [ "${REPO_REMOTE:8:10}" = "github.com" ]; then
     export GITHUB_NAME=$(git config --get remote.origin.url | sed -r "s#.+\.com[:/]{1,2}([^/]+)/.+#\1#")
 fi
 
-if [[ ! -z "$GIT_AUTHOR_NAME" ]]; then
-    git config --global user.name $GIT_AUTHOR_NAME
-fi
-
-if [[ ! -z "$GIT_AUTHOR_EMAIL" ]]; then
-    git config --global user.email $GIT_AUTHOR_EMAIL
-fi
-
 REPO_LIST=(
     tools
     server-code
@@ -55,20 +47,38 @@ function git_pull() {
     local UPSTREAM="$REMOTE/$BRANCH"
 
     pushd /workspace/evol-gitpod/.evol/$DIR 1>/dev/null
-    git fetch -q $REMOTE 1>/dev/null
 
-    local UPSTREAM_URL=$(git config --get remote.upstream.url)
+    local UPSTREAM_URL=$(git config --get remote.upstream.url 2>/dev/null || echo "")
     local FORK_URL=$(git config --get remote.origin.url 2>/dev/null || echo "")
 
+    if [ -z "$UPSTREAM_URL" ] && [[ ! -z "$FORK_URL" ]]; then
+        # this is a submodule: reverse the remotes
+        git remote rename origin upstream
+        UPSTREAM_URL="$FORK_URL"
+        FORK_URL=""
+    elif [[ ! -z "$UPSTREAM_URL" ]] && [ "$UPSTREAM_URL" = "$FORK_URL" ]; then
+        # origin and upstream are the same: remove origin
+        git remote remove origin
+        FORK_URL=""
+    fi
+
+    git fetch -q $REMOTE 1>/dev/null
+    
     if [[ ! -z "$GITLAB_NAME" ]] && [ -z "$FORK_URL" ]; then
         FORK_URL=$(git config --get remote.upstream.url | sed -r "s%https://gitlab.com/([^/]+)/(.+(\.git)?)%https://gitlab.com/$GITLAB_NAME/\2%")
         local FORK_EXISTS=$(git ls-remote -hq "$FORK_URL" master &>/dev/null || echo $?)
-        if [ -z "$FORK_EXISTS" ]; then
+        if [ -z "$FORK_EXISTS" ] && [ "$FORK_URL" != "$UPSTREAM_URL" ]; then
             git remote add --fetch origin "$FORK_URL" 1>/dev/null
         fi
     fi
 
-    local CURRENT=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+    local CURRENT=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || echo "")
+
+    if [ -z "$CURRENT" ]; then
+        # HEAD is detached: do nothing
+        return
+    fi
+
     local CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
 
     if [ "$CURRENT" = "$UPSTREAM" ] && [ "$CURRENT_BRANCH" = "$BRANCH" ]; then
@@ -95,48 +105,22 @@ if [[ ! -z "$GITHUB_NAME" ]] && [ -z "$HERC_FORK_URL" ]; then
     HERC_FORK_URL="https://github.com/$GITHUB_NAME/Hercules.git"
     FORK_EXISTS=$(git ls-remote -hq "$HERC_FORK_URL" master &>/dev/null || echo $?)
     if [ -z "$FORK_EXISTS" ]; then
+        git remote add --fetch herc "https://github.com/HerculesWS/Hercules.git" 1>/dev/null
         git remote add --fetch hub "$HERC_FORK_URL" 1>/dev/null
     fi
 fi
 popd 1>/dev/null
 
+# initialize the SQL dbs
 bash /workspace/evol-gitpod/scripts/sql.sh
 
-
-# custom mods
-GITPOD_CUSTOM=${GITPOD_CUSTOM:-$CUSTOM_MODS}
-if [[ ! -z "$GITPOD_CUSTOM" ]]; then
-    if [[ ! -d ".gitpod-config" ]]; then
-        git clone --depth=1 -q "$GITPOD_CUSTOM" .gitpod-config &>/dev/null
-    fi
-    pushd .gitpod-config &>/dev/null
-    make &>/dev/null
-    popd &>/dev/null
-fi
-
-
-# seppuku prompt
-ZSH_INSTALLED=$(tail ~/.bashrc | grep -sc "exec zsh" || true)
-
-if [ "$ZSH_INSTALLED" = "0" ]; then
-    if [[ ! -d "seppuku" ]]; then
-        curl -Lo ohmyzsh.sh https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh &>/dev/null
-        git clone https://github.com/Helianthella/seppuku.git seppuku &>/dev/null
-    fi
-    sh ohmyzsh.sh --unattended &>/dev/null
-    pushd seppuku &>/dev/null
-    make install &>/dev/null
-    popd &>/dev/null
-    echo "exec zsh" >> ~/.bashrc
-    echo "ZSH_THEME_TERM_TITLE_IDLE=\"\${ZSH_THEME_TERM_TAB_TITLE_IDLE}\"" >> ~/.zshrc
-    echo "unalias gp" >> ~/.zshrc # workaround for ohmyzsh:plugins/git/git.plugin.zsh
-fi
-
+# set up the dotfiles and custom mods
+. /workspace/evol-gitpod/scripts/dotfiles.sh
 
 echo
 echo "- - - - - - - - - - - - - - - - - - - - - - - -"
 echo
 echo "✅  all done"
 
-cd /workspace/evol-gitpod
+cd /workspace/evol-gitpod/.legacy
 #clear

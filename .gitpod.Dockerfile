@@ -14,7 +14,7 @@ RUN wget http://repo.evolonline.org/manaplus/ubuntu/manaplus-addrepo_1.3_all.deb
  && sudo apt-get install -yy \
     manaplus valgrind gdb \
     make autoconf automake autopoint libtool libz-dev \
-    libmysqlclient-dev zlib1g-dev libpcre3-dev \
+    libmysqlclient-dev zlib1g-dev libpcre3-dev doxygen \
     cpanminus libexpat1 libexpat1-dev wget tmux ripgrep \
     xvfb x11vnc xterm zsh \
  && sudo apt-get build-dep -yy manaplus \
