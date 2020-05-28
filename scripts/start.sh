@@ -63,7 +63,7 @@ function git_pull() {
     fi
 
     git fetch -q $REMOTE 1>/dev/null
-    
+
     if [[ ! -z "$GITLAB_NAME" ]] && [ -z "$FORK_URL" ]; then
         FORK_URL=$(git config --get remote.upstream.url | sed -r "s%https://gitlab.com/([^/]+)/(.+(\.git)?)%https://gitlab.com/$GITLAB_NAME/\2%")
         local FORK_EXISTS=$(git ls-remote -hq "$FORK_URL" master &>/dev/null || echo $?)
@@ -122,5 +122,5 @@ echo "- - - - - - - - - - - - - - - - - - - - - - - -"
 echo
 echo "✅  all done"
 
-cd /workspace/evol-gitpod/.legacy
+cd /workspace/evol-gitpod/.evol
 #clear
