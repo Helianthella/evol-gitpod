@@ -17,6 +17,8 @@ RUN wget http://repo.evolonline.org/manaplus/ubuntu/manaplus-addrepo_1.3_all.deb
     libmysqlclient-dev zlib1g-dev libpcre3-dev doxygen \
     cpanminus libexpat1 libexpat1-dev wget tmux ripgrep \
     xvfb x11vnc xterm zsh \
+ && curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - \
+ && sudo apt-get install -yy nodejs \
  && sudo apt-get build-dep -yy manaplus \
  && sudo cpanm XML::Simple \
  && sudo apt-get clean \

@@ -20,6 +20,15 @@
         },
         {
             "path": "file:///workspace/evol-gitpod"
+        },
+        {
+            "path": "file:///workspace/evol-gitpod/.evol/ansible"
+        },
+        {
+            "path": "file:///workspace/evol-gitpod/.evol/policies"
+        },
+        {
+            "path": "file:///workspace/evol-gitpod/.evol/themanaworld-website"
         }
     ],
     "settings": {
